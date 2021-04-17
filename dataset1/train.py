@@ -150,7 +150,7 @@ def eva(sess, model):
 
 
 # Placeholders for input, output and dropout
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 config = tf.ConfigProto()
 # config.gpu_options.allow_growth = True
 sess = tf.InteractiveSession(config=config)
@@ -164,13 +164,13 @@ sess.run(tf.global_variables_initializer())
 
 saver = tf.train.Saver()
 
-saver.restore(sess, "./model_save/model.ckpt")
-auc_eva = eva(sess, model)
-print(auc_eva)
+#saver.restore(sess, "./model_save/model.ckpt")
+#auc_eva = eva(sess, model)
+# print(auc_eva)
 with open(time + ".txt", "a") as f:
     bestPerformance = 0.0
     best_auceva = 0
-    auc_eva = eva(sess, model)
+    #auc_eva = eva(sess, model)
     for epoch in range(10000000):
         num = len(train_interaction_data) / train_batchSize
         num = int(num)
