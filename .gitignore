@@ -1,5 +1,7 @@
 .git/*
 .idea
-src/*.pyc
-src/__pycache__/
+*/*.pyc
+*/__pycache__/
 data/input
+*/model_save/*
+*/data/*
