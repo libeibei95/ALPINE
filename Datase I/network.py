@@ -119,7 +119,22 @@ class Lstm(object):
 
             self.enhance_output = tf.reshape(output, [-1])
 
-        #
+        # todo: change loss and prediction
+        self.evaoutput = tf.nn.sigmoid(self.output - self.neg_output)  # prediction
+
+        with tf.name_scope('loss'):
+            l2_norm = tf.add_n([tf.nn.l2_loss(v) for v in tf.trainable_variables() if 'w' in v.name])
+            self.pos_loss = tf.reduce_sum(
+                tf.maximum(0., self.y_inputs * (self.neg_output - self.pos_output)  + 1 )
+            )
+
+            self.neg_loss = tf.reduce_sum(
+                tf.maximum(0., (self.y_inputs - 1.) * (self.neg_output - self.pos_output)  + 1 )
+            )
+
+            self.loss = (self.pos_loss + self.neg_loss)/tf.shape(self.y_inputs)[0] + l2_norm * 0.00005
+
+        '''
         self.output = 0.58 * self.pos_output + 0.18 * self.neg_output + 0.24 * self.enhance_output
         self.evaoutput = tf.nn.sigmoid(self.output)
 
@@ -127,6 +142,7 @@ class Lstm(object):
             l2_norm = tf.add_n([tf.nn.l2_loss(v) for v in tf.trainable_variables() if 'w' in v.name])
             self.loss = tf.reduce_mean(
                 tf.nn.sigmoid_cross_entropy_with_logits(logits=self.output, labels=self.y_inputs)) + l2_norm * 0.00005
+        '''
 
     def weight_variable(self, shape, name):
         """Create a weight variable with appropriate initialization."""

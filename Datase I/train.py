@@ -197,16 +197,12 @@ with open(time + ".txt", "a") as f:
                                               model.keep_prob: 1.0})
             if num % 100 == 1:
                 auc = roc_auc_score(label, y_pred)
-
                 print('auc in train:', auc)
                 print("epoch:", epoch, ' num:', num, ' loss:', loss)
                 f.write("epoch:" + str(epoch) + ' num:' + str(num) + ' loss:' + str(loss) + ' auc:' + str(auc) + "\n")
                 f.flush()
             if num % 2000 == 1 and not num == 1:
                 auc_eva = eva(sess, model)
-                if (auc_eva > best_auceva):
-                    save_path = saver.save(sess, "./model_save/model.ckpt")
-                    best_auceva = auc_eva
                 print('epoch:', epoch, 'auc on val:', auc_eva, 'best_auceva', best_auceva)
                 f.write(
                     'epoch:' + str(epoch) + ' auc on val:' + str(auc_eva) + ' best_auceva:' + str(best_auceva) + "\n")
@@ -214,7 +210,7 @@ with open(time + ".txt", "a") as f:
 
         auc_eva = eva(sess, model)
         if (auc_eva > best_auceva):
-            save_path = saver.save(sess, "./model_save/model.ckpt")
+            save_path = saver.save(sess, "model_save/model.ckpt")
             best_auceva = auc_eva
         print('epoch:', epoch, 'auc on val:', auc_eva, 'best_auceva', best_auceva)
         f.write('epoch:' + str(epoch) + ' auc on val:' + str(auc_eva) + ' best_auceva:' + str(best_auceva) + "\n")
