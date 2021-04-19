@@ -132,7 +132,7 @@ class Lstm(object):
                 tf.maximum(0., (self.y_inputs - 1.) * (self.neg_output - self.pos_output) + 1)
             )
 
-            self.loss = (self.pos_loss + self.neg_loss) / tf.shape(self.y_inputs)[0] + l2_norm * 0.00005
+            self.loss = (self.pos_loss + self.neg_loss) / tf.to_float(tf.shape(self.y_inputs)[0]) + l2_norm * 0.00005
 
         '''
         self.output = 0.58 * self.pos_output + 0.18 * self.neg_output + 0.24 * self.enhance_output

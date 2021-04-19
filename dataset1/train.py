@@ -41,7 +41,7 @@ visual = np.load(visual)
 print(visual.shape)
 user_em = np.load("data/user_like.npy")
 print(user_em.shape)
-with open("data/dataset.pkl", 'rb') as f:
+with open("data/dataset_mini.pkl", 'rb') as f:
     train_interaction_data = pickle.load(f)
     test_interaction_data = pickle.load(f)
     pos_his_data = pickle.load(f)
@@ -147,6 +147,13 @@ def eva(sess, model):
         result.extend(y_predVal)
         result_ans.extend(label)
     return roc_auc_score(result_ans, result)
+def seed_tensorflow(seed=42):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    tf.set_random_seed(seed)
+
+seed_tensorflow(1024)
 
 
 # Placeholders for input, output and dropout
@@ -176,7 +183,6 @@ with open(time + ".txt", "a") as f:
         num = int(num)
 
         for num in tqdm(range(num)):
-
             label, pos_input, pos_mask_input, pos_edge_input, neg_input, neg_mask_input, neg_edge_input, item_input, user_id_input = getTrainBatch(
                 train_batchSize, num)
 
